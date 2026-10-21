@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { IconChevronDown, IconClose } from '../icons/index.jsx'
 import { userMessage } from '../lib/errors.js'
 import { KIND_LABELS } from '../lib/vocabulary.js'
+import { hashHref, noteRoute } from '../lib/useHashRoute.js'
 
 /**
  * Las relaciones que la interfaz ofrece.
@@ -217,7 +218,9 @@ export function LinksEditor({
                 <li className="links-item" key={link.id}>
                   <span className="links-relation-chip">{relationLabel(link.relation)}</span>
                   <IconChevronDown className="links-arrow" width={13} height={13} />
-                  <span className="links-item-title">{title}</span>
+                  <a className="links-item-title" href={hashHref(noteRoute(link.targetId))}>
+                    {title}
+                  </a>
                   <button
                     type="button"
                     className="row-actions"
@@ -248,7 +251,9 @@ export function LinksEditor({
                 <li className="links-item links-item--incoming" key={link.id}>
                   <span className="links-relation-chip">{relationLabel(link.relation)}</span>
                   <IconChevronDown className="links-arrow links-arrow--incoming" width={13} height={13} />
-                  <span className="links-item-title">{title}</span>
+                  <a className="links-item-title" href={hashHref(noteRoute(link.sourceId))}>
+                    {title}
+                  </a>
                 </li>
                 )
               })}

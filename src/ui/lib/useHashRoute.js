@@ -13,6 +13,29 @@ export const ROUTES = Object.freeze({
   about: '/acerca',
 })
 
+/** A single note has its own address: `#/nota/<id>`. */
+export const NOTE_ROUTE_PREFIX = '/nota/'
+
+export function noteRoute(noteId) {
+  return `${NOTE_ROUTE_PREFIX}${noteId}`
+}
+
+/**
+ * Turns a route into an href.
+ *
+ * The fragment is what makes the route a route: without the `#` the
+ * browser would treat it as a path and leave the app.
+ */
+export function hashHref(route) {
+  return `#${route}`
+}
+
+export function noteIdFromRoute(route) {
+  if (!route || !route.startsWith(NOTE_ROUTE_PREFIX)) return null
+  const id = route.slice(NOTE_ROUTE_PREFIX.length)
+  return id.length > 0 ? id : null
+}
+
 function readHash() {
   if (typeof window === 'undefined') return ROUTES.notes
   const hash = window.location.hash.replace(/^#/, '')

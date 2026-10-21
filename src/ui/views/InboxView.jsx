@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { EmptyState } from '../components/EmptyState.jsx'
+import { FilterBar } from '../components/FilterBar.jsx'
 import { NoteRow } from '../components/NoteRow.jsx'
 import { VocabularyPanel } from '../components/Vocabulary.jsx'
 import { IconChevronDown, IconClose, IconList } from '../icons/index.jsx'
@@ -32,6 +33,8 @@ export function InboxView({
 }) {
   const [scope, setScope] = useState('inbox')
   const [vocabularyOpen, setVocabularyOpen] = useState(false)
+  const [selectedKinds, setSelectedKinds] = useState([])
+  const [selectedTags, setSelectedTags] = useState([])
 
   const containerNames = useMemo(() => {
     const map = new Map()
@@ -68,14 +71,50 @@ export function InboxView({
     [inScope],
   )
 
+  const kindCounts = useMemo(() => {
+    const counts = new Map()
+    for (const note of inScope[scope]) {
+      counts.set(note.kind, (counts.get(note.kind) ?? 0) + 1)
+    }
+    return counts
+  }, [inScope, scope])
+
+  const tagCounts = useMemo(() => {
+    const counts = new Map()
+    for (const note of inScope[scope]) {
+      for (const tag of note.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 12)
+  }, [inScope, scope])
+
+  // Los filtros se combinan: con varios tipos seleccionados se quiere ver
+  // cualquiera de ellos; con varias etiquetas, todas.
+  const filteredNotes = useMemo(() => {
+    const source = inScope[scope]
+    const byKind =
+      selectedKinds.length === 0
+        ? source
+        : source.filter((note) => selectedKinds.includes(note.kind))
+    if (selectedTags.length === 0) return byKind
+    return byKind.filter((note) => selectedTags.every((tag) => note.tags.includes(tag)))
+  }, [inScope, scope, selectedKinds, selectedTags])
+
   const visible = useMemo(
-    () => searchNotes(inScope[scope], { query: searchQuery, includeArchived: scope === 'archived' }),
-    [inScope, scope, searchQuery],
+    () => searchNotes(filteredNotes, { query: searchQuery, includeArchived: scope === 'archived' }),
+    [filteredNotes, searchQuery, scope],
   )
+
+  function toggle(list, value, setter) {
+    setter(list.includes(value) ? list.filter((item) => item !== value) : [...list, value])
+  }
 
   const empty = visible.length === 0
   const firstRun = notes.length === 0
-  const filtered = Boolean(searchQuery) || Boolean(containerFilter)
+  const hasFilters =
+    Boolean(searchQuery) ||
+    Boolean(containerFilter) ||
+    selectedKinds.length > 0 ||
+    selectedTags.length > 0
 
   return (
     <section className="view" aria-labelledby="notes-title">
@@ -112,6 +151,19 @@ export function InboxView({
         </button>
       </div>
 
+      <FilterBar
+        kindCounts={kindCounts}
+        tagCounts={tagCounts}
+        selectedKinds={selectedKinds}
+        selectedTags={selectedTags}
+        onToggleKind={(kind) => toggle(selectedKinds, kind, setSelectedKinds)}
+        onToggleTag={(tag) => toggle(selectedTags, tag, setSelectedTags)}
+        onClear={() => {
+          setSelectedKinds([])
+          setSelectedTags([])
+        }}
+      />
+
       {containerFilter ? (
         <div className="filter-strip">
           <span className="filter-strip-label">Contenedor</span>
@@ -137,8 +189,8 @@ export function InboxView({
 
       {empty ? (
         <EmptyState
-          title={emptyTitle(scope, filtered)}
-          hint={emptyHint(scope, firstRun, counts.all, filtered)}
+          title={emptyTitle(scope, hasFilters)}
+          hint={emptyHint(scope, firstRun, counts.all, hasFilters)}
           examples={firstRun ? EXAMPLES : []}
           showVocabulary={firstRun}
           onExample={onExample}

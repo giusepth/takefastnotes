@@ -264,3 +264,58 @@ describe('search and container filter', () => {
     expect(document.activeElement).toBe(search)
   })
 })
+
+describe('filters and linked notes', () => {
+  it('filters the list by type', async () => {
+    const db = await openDatabase({ name: 'smoke-filter-kind' })
+    const repositories = createRepositories(db)
+
+    render(<App repositories={repositories} />)
+
+    const input = await screen.findByLabelText('Captura rápida')
+    fireEvent.change(input, { target: { value: 'feature: una funcionalidad' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await screen.findByText('una funcionalidad')
+
+    fireEvent.change(input, { target: { value: 'decision: una decisión' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await screen.findByText('una decisión')
+
+    fireEvent.click(screen.getByRole('button', { name: /^Funcionalidad/ }))
+
+    await waitFor(() => expect(screen.queryByText('una decisión')).toBeNull())
+    expect(screen.getByText('una funcionalidad')).toBeTruthy()
+  })
+
+  it('opens a linked note on its own address', async () => {
+    const db = await openDatabase({ name: 'smoke-link-open' })
+    const repositories = createRepositories(db)
+
+    render(<App repositories={repositories} />)
+
+    const input = await screen.findByLabelText('Captura rápida')
+    fireEvent.change(input, { target: { value: 'feature: nota destino' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await screen.findByText('nota destino')
+
+    fireEvent.change(input, { target: { value: 'decision: nota origen' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await screen.findByText('nota origen')
+
+    // The newest note is first in the register: link it to the other one.
+    fireEvent.click(screen.getAllByRole('button', { name: 'Acciones de la nota' })[0])
+    fireEvent.click(screen.getByRole('menuitemradio', { name: /Editar nota/ }))
+
+    const search = await screen.findByLabelText('Buscar nota para vincular')
+    fireEvent.change(search, { target: { value: 'destino' } })
+    fireEvent.click(await screen.findByRole('button', { name: /nota destino/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Añadir enlace' }))
+
+    const link = await screen.findByRole('link', { name: 'nota destino' })
+    fireEvent.click(link)
+
+    // The note opens on its own address, as a document.
+    await screen.findByRole('heading', { name: 'nota destino', level: 1 })
+    expect(window.location.hash).toMatch(/^#\/nota\//)
+  })
+})

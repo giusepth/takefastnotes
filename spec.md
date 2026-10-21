@@ -390,11 +390,14 @@ Routing is **hash based** (`#/notas`, `#/acerca`): the fragment never reaches th
 |---|---|---|
 | `#/notas` | `InboxView` | The register: the note list with inbox/all/archived scopes, inline editing, archiving and links. |
 | `#/contenedores` | `ContainersView` | The contexts a note can be filed under: tree, create, delete. |
+| `#/nota/<id>` | `NoteView` | One note as a document: content, context, and the notes that point at it. |
 | `#/acerca` | `AboutView` | What the app is, how it is used, and the data policy. |
 
 The **shell** owns the frame: a sticky header with the identity, the search field (`Ctrl/Cmd+K`), the section links and the capture bar, then a two-column body — a **sidebar with the container tree** on the left and the register on the right. The sidebar is the navigation spine: selecting a node filters the list to that container *and its descendants*, so the number the tree shows and the list underneath always agree. On narrow screens the sidebar collapses behind a toggle.
 
 The containers page shows the same tree in its management form. The two never appear at once: on that route the sidebar steps aside, because the same names twice on one screen is noise, not navigation.
+
+**Finding notes.** Three filters stack, and the counts always agree with what they filter: the **search field** (`Ctrl/Cmd+K`) matches title, body and tags and ranks title matches first; the **filter bar** narrows by type and by tag, and several selections combine (types as *any of*, tags as *all of*); the **container tree** narrows to a container and its descendants. A note reached from a link opens on `#/nota/<id>`, as a document with its own address — which also makes it linkable and shareable.
 
 ### The "Acerca de" section
 
@@ -572,7 +575,7 @@ Focus on the domain — it holds the logic worth protecting.
 | 3c — Nested container tree, sidebar, container filter | ✅ done |
 | 4a — Links between notes | ✅ done |
 | 4b — Search (`Ctrl/Cmd+K`) | ✅ done |
-| 4c — Filters by type and tag, open a linked note | 🔲 pending |
+| 4c — Filters by type and tag, open a linked note | ✅ done |
 | 5 — Settings screen, polish | 🔲 pending (export/import already live inside "Acerca de") |
 | 6 — Deployment to Vercel Hobby | 🔲 pending (`vercel.json` written, never deployed) |
 | 7 — Tests | ✅ done (101 tests: domain, adapters, UI smoke) |

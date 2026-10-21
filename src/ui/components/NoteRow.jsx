@@ -11,6 +11,7 @@ import {
   STATUS_STAGES,
   STATUSES,
 } from '../lib/vocabulary.js'
+import { hashHref, noteRoute } from '../lib/useHashRoute.js'
 import { Menu } from './Menu.jsx'
 import { NoteEditor } from './NoteEditor.jsx'
 
@@ -133,7 +134,11 @@ export function NoteRow({
           />
         ) : (
           <>
-            <h3 className="note-title">{note.title}</h3>
+            <h3 className="note-title">
+              <a className="note-title-link" href={hashHref(noteRoute(note.id))}>
+                {note.title}
+              </a>
+            </h3>
             {preview ? <p className="note-preview">{preview}</p> : null}
 
             {note.tags.length > 0 || containerName ? (

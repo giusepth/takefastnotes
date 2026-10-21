@@ -6,10 +6,11 @@ import { ContainerTree } from './ui/components/ContainerTree.jsx'
 import { InboxView } from './ui/views/InboxView.jsx'
 import { ContainersView } from './ui/views/ContainersView.jsx'
 import { AboutView } from './ui/views/AboutView.jsx'
+import { NoteView } from './ui/views/NoteView.jsx'
 import { ErrorBoundary } from './ui/components/ErrorBoundary.jsx'
 import { ErrorState, LoadingState } from './ui/components/States.jsx'
 import { IconChevronDown, IconDrive } from './ui/icons/index.jsx'
-import { ROUTES, isKnownRoute, useHashRoute } from './ui/lib/useHashRoute.js'
+import { ROUTES, isKnownRoute, noteIdFromRoute, useHashRoute } from './ui/lib/useHashRoute.js'
 
 const NAV = [
   { href: ROUTES.notes, label: 'Notas' },
@@ -34,6 +35,7 @@ function Shell() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const route = useHashRoute()
+  const noteId = noteIdFromRoute(route)
   const active = isKnownRoute(route) ? route : ROUTES.notes
 
   function loadExample(example) {
@@ -148,7 +150,17 @@ function Shell() {
           {state.status === 'loading' ? <LoadingState /> : null}
           {state.status === 'error' ? <ErrorState error={state.error} /> : null}
           {state.status === 'ready' ? (
-            active === ROUTES.about ? (
+            noteId ? (
+              <NoteView
+                note={state.notes.find((note) => note.id === noteId) ?? null}
+                notes={state.notes}
+                links={state.links}
+                containers={state.containers}
+                onUpdateNote={actions.updateNote}
+                onCreateLink={actions.createLink}
+                onRemoveLink={actions.removeLink}
+              />
+            ) : active === ROUTES.about ? (
               <AboutView
                 notes={state.notes}
                 containers={state.containers}
@@ -193,7 +205,7 @@ function Shell() {
             Todo lo que captures se queda en este navegador. Sin cuenta, sin servidor, sin
             sincronización.
           </span>
-          <span className="footer-next">Próximo: notas enlazadas en la lista, filtros por tipo y etiqueta.</span>
+          <span className="footer-next">Próximo: ajustes, y el despliegue a Vercel.</span>
         </div>
       </footer>
     </div>
