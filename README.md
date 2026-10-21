@@ -50,6 +50,24 @@ src/ui/        componentes, vistas, estilos y el store. Habla con el dominio, nu
 La regla de dependencia es `ui → domain ← infra`. El dominio se puede testear sin navegador y la
 base se puede cambiar sin tocar una sola regla de negocio.
 
+## Compartir el enlace
+
+Cuando pasás el link por WhatsApp, Slack o X, se ve la miniatura y la
+descripción. Eso lo dan las etiquetas Open Graph y Twitter Card de
+`index.html`, con la URL absoluta del sitio y la imagen
+`public/og-image.png`.
+
+La miniatura **se dibuja con el sistema de diseño de la app**, así que no
+se desincroniza de la interfaz:
+
+```bash
+npm run og:image     # regenera public/og-image.png (1200×630)
+```
+
+Si el sitio cambia de dominio, cambiá `SITE_URL` en `vite.config.js` (o
+la variable de entorno `SITE_URL` al construir) y redespliegá: las
+etiquetas apuntan al dominio viejo hasta que lo hacés.
+
 ## Herramientas de diseño
 
 La interfaz se diseñó con el skill **Impeccable** (instalado localmente, no versionado):

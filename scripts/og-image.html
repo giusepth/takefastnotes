@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TakeFastNotes — miniatura</title>
+    <!--
+      La plantilla de la imagen que se ve al compartir el enlace.
+      Se renderiza con el mismo sistema de diseño de la app (tokens y
+      tipografías reales), así que la miniatura no es una imagen suelta:
+      es la app dibujada.
+
+      Regenerar con:  npm run og:image
+    -->
+    <link rel="stylesheet" href="../src/styles/fonts.css" />
+    <link rel="stylesheet" href="../src/styles/tokens.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: var(--surface-page);
+        color: var(--ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 64px 72px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .brand-name {
+        font-size: 30px;
+        font-weight: 680;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      .brand-statement {
+        margin: 0;
+        font-size: 19px;
+        color: var(--ink-3);
+        line-height: 1.4;
+      }
+
+      .headline {
+        margin: 44px 0 0;
+        font-size: 52px;
+        font-weight: 680;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+        max-width: 16ch;
+      }
+
+      .headline em {
+        font-style: normal;
+        color: var(--ink-3);
+      }
+
+      .sheet {
+        position: absolute;
+        right: 72px;
+        bottom: 64px;
+        width: 600px;
+        background: var(--surface-panel);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 1px 2px rgb(16 19 25 / 6%), 0 12px 32px rgb(16 19 25 / 8%);
+        overflow: hidden;
+      }
+
+      .sheet-row {
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr) 92px;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--rule-faint);
+      }
+
+      .sheet-row:last-child {
+        border-bottom: 0;
+      }
+
+      .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+      }
+
+      .swatch--feature {
+        background: var(--kind-feature);
+      }
+      .swatch--fix {
+        background: var(--kind-fix);
+      }
+      .swatch--decision {
+        background: var(--kind-decision);
+      }
+      .swatch--idea {
+        background: var(--kind-idea);
+      }
+      .swatch--question {
+        background: var(--kind-question);
+      }
+      .swatch--note {
+        background: var(--kind-note);
+      }
+
+      .sheet-title {
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sheet-stage {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--stage-pending-ink);
+        border: 1px solid var(--rule-strong);
+        border-radius: 999px;
+        padding: 3px 9px;
+        justify-self: end;
+        white-space: nowrap;
+      }
+
+      .sheet-stage--active {
+        background: var(--stage-active-bg);
+        border-color: var(--stage-active-bg);
+        color: var(--stage-active-ink);
+      }
+
+      .grammar {
+        position: absolute;
+        left: 72px;
+        bottom: 72px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+      }
+
+      .grammar code {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        background: var(--surface-panel);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-sm);
+        padding: 4px 8px;
+        color: var(--ink);
+      }
+
+      .grammar span {
+        color: var(--ink-3);
+      }
+
+      .foot {
+        position: absolute;
+        right: 72px;
+        top: 72px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-2);
+        background: var(--surface-panel);
+        border: 1px solid var(--rule-strong);
+        border-radius: var(--radius-sm);
+        padding: 7px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="brand">
+        <span class="brand-name">TakeFastNotes</span>
+        <p class="brand-statement">Cuaderno de notas rápidas que vive en tu navegador.</p>
+      </div>
+
+      <h1 class="headline">
+        Capturá una idea <em>en una tecla.</em>
+      </h1>
+
+      <div class="foot">Solo local · sin cuenta · sin servidor</div>
+
+      <div class="sheet">
+        <div class="sheet-row">
+          <span class="swatch swatch--feature"></span>
+          <span class="sheet-title">agregar reintentos al webhook</span>
+          <span class="sheet-stage sheet-stage--active">Bandeja</span>
+        </div>
+        <div class="sheet-row">
+          <span class="swatch swatch--fix"></span>
+          <span class="sheet-title">el worker se come los 503</span>
+          <span class="sheet-stage">Bandeja</span>
+        </div>
+        <div class="sheet-row">
+          <span class="swatch swatch--decision"></span>
+          <span class="sheet-title">dejar el pipeline como está</span>
+          <span class="sheet-stage">Bandeja</span>
+        </div>
+      </div>
+
+      <div class="grammar">
+        <code>#etiqueta</code>
+        <code>feature:</code>
+        <code>@contenedor</code>
+        <span>la gramática</span>
+      </div>
+    </div>
+  </body>
+</html>

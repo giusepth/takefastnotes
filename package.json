@@ -11,6 +11,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "og:image": "node scripts/render-og-image.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

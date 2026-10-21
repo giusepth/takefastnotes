@@ -1,16 +1,55 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#eaecf1" />
     <meta name="robots" content="noindex, nofollow" />
+
+    <!--
+      La URL del sitio vive en un solo lugar: `SITE_URL` en vite.config.js
+      (se puede sobreescribir con la variable de entorno SITE_URL).
+      El plugin la reemplaza al construir, así que las etiquetas de
+      compartir apuntan a un dominio absoluto — que es lo que WhatsApp, X y
+      Slack necesitan para encontrar la miniatura.
+    -->
+    <link rel="canonical" href="%SITE_URL%/" />
+
+    <title>TakeFastNotes — Capturá una idea en una tecla</title>
     <meta
       name="description"
-      content="Local-first quick notes with containers, tags and status."
+      content="Cuaderno de notas rápidas que vive por completo en tu navegador. Capturá una idea, una funcionalidad o una corrección en una tecla, y organizala después. Sin cuenta, sin servidor, sin que nadie más la vea."
     />
-    <title>TakeFastNotes</title>
+
+    <!-- Open Graph: WhatsApp, Telegram, Slack, Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TakeFastNotes" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:title" content="TakeFastNotes — Capturá una idea en una tecla" />
+    <meta
+      property="og:description"
+      content="Cuaderno de notas rápidas que vive por completo en tu navegador. Sin cuenta, sin servidor, sin que nadie más vea lo que escribís."
+    />
+    <meta property="og:image" content="%SITE_URL%/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="La interfaz de TakeFastNotes: un registro de notas con su tipo, su estado y la gramática de captura."
+    />
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TakeFastNotes — Capturá una idea en una tecla" />
+    <meta
+      name="twitter:description"
+      content="Cuaderno de notas rápidas que vive por completo en tu navegador. Sin cuenta, sin servidor, sin que nadie más vea lo que escribís."
+    />
+    <meta name="twitter:image" content="%SITE_URL%/og-image.png" />
   </head>
   <body>
     <div id="root"></div>

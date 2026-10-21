@@ -1,6 +1,25 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
+/**
+ * The address the app is published at.
+ *
+ * It is a single value in a single place because the share tags need an
+ * absolute URL: WhatsApp, X and Slack do not resolve relative paths when
+ * they fetch the preview image. Override it at build time with the
+ * SITE_URL environment variable (a different domain, a preview, a mirror).
+ */
+const SITE_URL = process.env.SITE_URL ?? 'https://takefastnotes.vercel.app'
+
+function siteMeta() {
+  return {
+    name: 'site-meta',
+    transformIndexHtml(html) {
+      return html.replaceAll('%SITE_URL%', SITE_URL)
+    },
+  }
+}
+
 // The production CSP lives in vercel.json and is strict: no inline styles,
 // no inline scripts, no network at all.
 //
@@ -27,7 +46,7 @@ const DEV_CSP = [
 ].join('; ')
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), siteMeta()],
   server: {
     headers: {
       'Content-Security-Policy': DEV_CSP,
