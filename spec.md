@@ -577,7 +577,7 @@ Focus on the domain — it holds the logic worth protecting.
 | 4b — Search (`Ctrl/Cmd+K`) | ✅ done |
 | 4c — Filters by type and tag, open a linked note | ✅ done |
 | 5 — Settings screen, polish | 🔲 pending (export/import already live inside "Acerca de") |
-| 6 — Deployment to Vercel Hobby | 🔲 pending (`vercel.json` written, never deployed) |
+| 6 — Deployment to Vercel Hobby | ✅ done — https://takefastnotes.vercel.app, auto-deploy desde `main` |
 | 7 — Tests | ✅ done (101 tests: domain, adapters, UI smoke) |
 
 ### Plan
