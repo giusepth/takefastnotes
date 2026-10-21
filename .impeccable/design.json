@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-20T14:30:00.000Z",
+  "title": "Design System: TakeFastNotes",
+  "extensions": {
+    "colorMeta": {
+      "page-ground": {
+        "role": "neutral",
+        "displayName": "Desk Ground",
+        "canonical": "#eaecf1",
+        "tonalRamp": ["#0f1116", "#232733", "#3b4050", "#565c6d", "#767d8f", "#9aa1b3", "#c2c7d4", "#eaecf1"]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#0f1116", "#2b2f38", "#4c515c", "#6f7480", "#949aa4", "#b9bec7", "#dcdee3", "#ffffff"]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "canonical": "#0f1218",
+        "tonalRamp": ["#0f1218", "#2b303a", "#4b515d", "#6b7280", "#8b92a0", "#abb1bd", "#ccd0d7", "#eaecf1"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Ink Block",
+        "canonical": "#101319",
+        "tonalRamp": ["#101319", "#2a303c", "#454b58", "#606673", "#7b818e", "#969ca8", "#b6bbc5", "#dde0e6"]
+      },
+      "kind-feature": {
+        "role": "secondary",
+        "displayName": "Feature Teal",
+        "canonical": "#0b6b63",
+        "tonalRamp": ["#062e2a", "#0b6b63", "#2e9189", "#59b3ab", "#8bcfc9", "#b8e2de", "#d9f1ef", "#eefaf8"]
+      },
+      "kind-fix": {
+        "role": "secondary",
+        "displayName": "Fix Red",
+        "canonical": "#b42318",
+        "tonalRamp": ["#4a0c07", "#b42318", "#d1483c", "#e07166", "#eb9b93", "#f2c2bd", "#f8dedb", "#fdf0ee"]
+      },
+      "kind-decision": {
+        "role": "secondary",
+        "displayName": "Decision Amber",
+        "canonical": "#8a4b0b",
+        "tonalRamp": ["#3f2205", "#8a4b0b", "#b56c22", "#cf8d45", "#e0ad74", "#ebcaa4", "#f3e2cd", "#faf3e8"]
+      },
+      "kind-idea": {
+        "role": "secondary",
+        "displayName": "Idea Violet",
+        "canonical": "#6b28d9",
+        "tonalRamp": ["#2e0d63", "#6b28d9", "#8b56e2", "#ab83ea", "#c6adf1", "#dccff7", "#ece5fa", "#f6f2fd"]
+      },
+      "kind-question": {
+        "role": "secondary",
+        "displayName": "Question Blue",
+        "canonical": "#0b6a9b",
+        "tonalRamp": ["#053047", "#0b6a9b", "#2b8bbd", "#58aad2", "#89c5e3", "#b3dbee", "#d2ebf5", "#ecf5fa"]
+      },
+      "kind-note": {
+        "role": "secondary",
+        "displayName": "Note Slate",
+        "canonical": "#5a6474",
+        "tonalRamp": ["#272c35", "#3b4350", "#5a6474", "#828b9a", "#aab1bd", "#c9ced7", "#e1e4ea", "#f3f4f7"]
+      },
+      "stage-done-ink": {
+        "role": "tertiary",
+        "displayName": "Done Green",
+        "canonical": "#10693a",
+        "tonalRamp": ["#052e18", "#10693a", "#2a8c58", "#4fae79", "#7bc99c", "#a6dfbf", "#cbeedd", "#eaf7f0"]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Failure Red",
+        "canonical": "#b42318",
+        "tonalRamp": ["#4a0c07", "#b42318", "#d1483c", "#e07166", "#eb9b93", "#f2c2bd", "#f8dedb", "#fdf0ee"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Product Name", "purpose": "The product name, once, in the top-left of the header." },
+      "headline": { "displayName": "State Title", "purpose": "The title of an empty or failed screen." },
+      "title": { "displayName": "Record Title", "purpose": "A note's title in the record sheet. The heaviest thing in the list." },
+      "body": { "displayName": "Body", "purpose": "Previews, explanations, and the one-line statement under the product name." },
+      "label": { "displayName": "Field Label", "purpose": "Uppercase field labels, section heads, and the 'will save as' lead." },
+      "data": { "displayName": "Literal Token", "purpose": "Syntax tokens, timestamps and counts, always in tabular figures." }
+    },
+    "shadows": [
+      {
+        "name": "menu",
+        "value": "0 1px 2px rgb(16 19 25 / 8%), 0 12px 28px rgb(16 19 25 / 12%)",
+        "purpose": "The only elevation in the system, on the kind and status popovers, which genuinely leave the page."
+      }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The single easing curve. State changes only." },
+      { "name": "duration-fast", "value": "120ms", "purpose": "Hover, focus and colour shifts on controls." },
+      { "name": "duration-base", "value": "180ms", "purpose": "Disclosures, chevrons, and the menu panel." },
+      { "name": "duration-slow", "value": "260ms", "purpose": "The capture confirmation clearing itself." }
+    ],
+    "breakpoints": [
+      { "name": "desktop-max", "value": "1120px" },
+      { "name": "lg", "value": "960px" },
+      { "name": "md", "value": "860px" },
+      { "name": "sm", "value": "720px" },
+      { "name": "xs", "value": "560px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The Capture action, the only solid ink button in the app.",
+      "html": "<button class=\"ds-btn-primary\">Capture</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.25rem; padding: 0 1rem; border: 1px solid transparent; border-radius: 4px; background: var(--accent, #101319); color: var(--accent-ink, #ffffff); font: 600 0.8125rem/1 'Archivo Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: var(--accent-hover, #2a303c); } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent, #101319); outline-offset: 2px; } .ds-btn-primary:disabled { background: var(--surface-sunken, #f5f6f9); color: var(--ink-4, #5c6474); border-color: var(--rule, #e3e6ec); cursor: not-allowed; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Every secondary control: Vocabulary, Reload, and the row-level menus.",
+      "html": "<button class=\"ds-btn-quiet\">Vocabulary</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; gap: 0.375rem; height: 2.25rem; padding: 0 0.75rem; border: 1px solid var(--rule-strong, #c9cedb); border-radius: 4px; background: var(--surface-panel, #ffffff); color: var(--ink-2, #3b4350); font: 600 0.75rem/1 'Archivo Variable', system-ui, sans-serif; cursor: pointer; transition: background-color 120ms cubic-bezier(0.16, 1, 0.3, 1), border-color 120ms cubic-bezier(0.16, 1, 0.3, 1), color 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-quiet:hover { background: var(--surface-hover, #f1f3f8); border-color: var(--ink-4, #5c6474); color: var(--ink, #0f1218); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--accent, #101319); outline-offset: 2px; }"
+    },
+    {
+      "name": "Capture Field",
+      "kind": "input",
+      "refersTo": "input-capture",
+      "description": "The primary action of the whole product: one field, Enter to save.",
+      "html": "<textarea class=\"ds-capture\" rows=\"2\" placeholder=\"Type a thought and press Enter…\"></textarea>",
+      "css": ".ds-capture { width: 100%; min-height: 2.9rem; max-height: 12rem; resize: vertical; padding: 0.6rem 0.75rem; border: 1px solid var(--rule-strong, #c9cedb); border-radius: 4px; background: var(--surface-panel, #ffffff); color: var(--ink, #0f1218); font: 400 0.9375rem/1.5 'Archivo Variable', system-ui, sans-serif; transition: border-color 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-capture::placeholder { color: var(--ink-4, #5c6474); } .ds-capture:hover { border-color: var(--ink-4, #5c6474); } .ds-capture:focus { outline: none; border-color: var(--accent, #101319); box-shadow: 0 0 0 3px var(--accent-soft, #e4e7ee); }"
+    },
+    {
+      "name": "Grammar Token",
+      "kind": "chip",
+      "refersTo": "chip-grammar",
+      "description": "One piece of the capture grammar, permanently in the capture bar. It fills with ink the moment the draft uses it.",
+      "html": "<div class=\"ds-grammar\"><code class=\"ds-grammar-code ds-grammar-code--used\">kind:</code><span class=\"ds-grammar-label\">sets the type</span></div>",
+      "css": ".ds-grammar { display: inline-flex; align-items: center; gap: 6px; } .ds-grammar-code { padding: 1px 5px; border: 1px solid var(--rule, #e3e6ec); border-radius: 2px; background: var(--surface-panel, #ffffff); color: var(--ink-3, #566070); font: 700 0.6875rem/1.4 'JetBrains Mono Variable', monospace; } .ds-grammar-code--used { background: var(--accent, #101319); border-color: var(--accent, #101319); color: var(--accent-ink, #ffffff); } .ds-grammar-label { color: var(--ink-4, #5c6474); font: 400 0.6875rem/1.4 'Archivo Variable', system-ui, sans-serif; }"
+    },
+    {
+      "name": "Kind Mark",
+      "kind": "chip",
+      "refersTo": "chip-tag",
+      "description": "The classification of a note: an 8px swatch in the kind's hue, always beside the kind's full name.",
+      "html": "<span class=\"ds-kind\"><span class=\"ds-kind-swatch ds-kind-swatch--feature\"></span>Feature</span>",
+      "css": ".ds-kind { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--ink-2, #3b4350); font: 600 0.75rem/1.4 'Archivo Variable', system-ui, sans-serif; } .ds-kind-swatch { width: 8px; height: 8px; border-radius: 2px; background: var(--kind-note, #5a6474); flex: 0 0 auto; } .ds-kind-swatch--feature { background: var(--kind-feature, #0b6b63); } .ds-kind-swatch--fix { background: var(--kind-fix, #b42318); } .ds-kind-swatch--decision { background: var(--kind-decision, #8a4b0b); } .ds-kind-swatch--idea { background: var(--kind-idea, #6b28d9); } .ds-kind-swatch--question { background: var(--kind-question, #0b6a9b); }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "badge-status-pending",
+      "description": "Where a note stands. The form carries the stage, not only the colour: outlined, solid, green, dashed.",
+      "html": "<span class=\"ds-status ds-status--done\"><svg viewBox=\"0 0 16 16\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3.4 8.4 3 3 6.2-6.6\"/></svg>Done</span>",
+      "css": ".ds-status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border: 1px solid var(--rule-strong, #c9cedb); border-radius: 3px; background: var(--stage-pending-bg, #ffffff); color: var(--stage-pending-ink, #55606f); font: 600 0.75rem/1.4 'Archivo Variable', system-ui, sans-serif; white-space: nowrap; } .ds-status--active { background: var(--stage-active-bg, #101319); border-color: var(--stage-active-bg, #101319); color: var(--stage-active-ink, #ffffff); } .ds-status--done { background: var(--stage-done-bg, #e3f4ea); border-color: var(--stage-done-ink, #10693a); color: var(--stage-done-ink, #10693a); } .ds-status--dropped { background: var(--stage-dropped-bg, #f1f2f6); border-style: dashed; color: var(--stage-dropped-ink, #6b7382); }"
+    },
+    {
+      "name": "Tag Chip",
+      "kind": "chip",
+      "refersTo": "chip-tag",
+      "description": "A free-form tag. Mono, sunken, hairline; the remove mark only appears on hover or focus.",
+      "html": "<button class=\"ds-tag\">#backend<svg class=\"ds-tag-x\" viewBox=\"0 0 16 16\" width=\"9\" height=\"9\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"><path d=\"m4.4 4.4 7.2 7.2M11.6 4.4l-7.2 7.2\"/></svg></button>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 4px; padding: 1px 5px; border: 1px solid var(--rule, #e3e6ec); border-radius: 2px; background: var(--surface-sunken, #f5f6f9); color: var(--ink-3, #566070); font: 400 0.6875rem/1.4 'JetBrains Mono Variable', monospace; cursor: pointer; } .ds-tag:hover { color: var(--ink, #0f1218); border-color: var(--rule-strong, #c9cedb); } .ds-tag-x { opacity: 0.5; } .ds-tag:hover .ds-tag-x { opacity: 1; }"
+    },
+    {
+      "name": "Scope Switch",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Inbox and All, each with its count in tabular figures. The selected scope is a solid ink block.",
+      "html": "<div class=\"ds-segmented\"><button class=\"ds-segmented-button ds-segmented-button--on\">Inbox<span class=\"ds-segmented-count\">6</span></button><button class=\"ds-segmented-button\">All<span class=\"ds-segmented-count\">8</span></button></div>",
+      "css": ".ds-segmented { display: inline-flex; overflow: hidden; border: 1px solid var(--rule-strong, #c9cedb); border-radius: 4px; background: var(--surface-panel, #ffffff); } .ds-segmented-button { display: inline-flex; align-items: center; gap: 6px; padding: 0.3rem 0.65rem; border: 0; background: transparent; color: var(--ink-3, #566070); font: 600 0.75rem/1.4 'Archivo Variable', system-ui, sans-serif; cursor: pointer; } .ds-segmented-button--on { background: var(--ink, #0f1218); color: var(--surface-panel, #ffffff); } .ds-segmented-count { font-family: 'JetBrains Mono Variable', monospace; font-size: 0.6875rem; opacity: 0.72; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Record Row",
+      "kind": "custom",
+      "refersTo": "panel-sheet",
+      "description": "One note in the sheet: kind column, words, state column. Hairline rule between rows, no card, no shadow.",
+      "html": "<div class=\"ds-row\"><span class=\"ds-kind\"><span class=\"ds-kind-swatch ds-kind-swatch--feature\"></span>Feature</span><div class=\"ds-row-body\"><h3 class=\"ds-row-title\">add webhook retries to the queue worker</h3><p class=\"ds-row-preview\">Backoff should be exponential and the attempt count visible.</p></div><span class=\"ds-status\">Inbox</span></div>",
+      "css": ".ds-row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 128px; gap: 1rem; padding: 0.75rem 1rem; background: var(--surface-panel, #ffffff); } .ds-row-body { min-width: 0; } .ds-row-title { margin: 0; color: var(--ink, #0f1218); font: 600 0.9375rem/1.35 'Archivo Variable', system-ui, sans-serif; letter-spacing: -0.012em; overflow-wrap: anywhere; } .ds-row-preview { margin: 3px 0 0; color: var(--ink-3, #566070); font: 400 0.8125rem/1.5 'Archivo Variable', system-ui, sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Annotated Record",
+    "overview": "TakeFastNotes is an instrument, and the interface is a working sheet rather than a card pile. A sheet has one job: hold a short record and say what it is. The screen is built the way a printed register is built — a fixed column for the classification, a wide column for the words, a right column for the state and the clock, and hairline rules between the rows. Nothing floats, nothing is rounded enough to be a card, and nothing is decorated. Depth comes from a white panel on a cool grey ground, not from shadows. The second half of the world is the vocabulary: two taxonomies run through the product, so the system refuses to abbreviate. A kind is always written out in full, and every mark is accompanied by its meaning somewhere on the same screen. The first run is a legend card; after that, the marks carry their own explanation in the menu that opens them. One thing in the system is alive: the grammar strip under the capture field, where the three pieces of capture syntax fill with ink the instant the draft uses them.",
+    "keyCharacteristics": [
+      "An achromatic shell; colour appears only where it carries information.",
+      "Words, not codes, everywhere a classification is shown.",
+      "A legend printed on the sheet, not hidden behind a disclosure.",
+      "Hairline rules, aligned columns, tabular numerals, small corners.",
+      "Motion is state feedback only: 120-180ms, one easing curve, no choreography."
+    ],
+    "rules": [
+      { "name": "The Achromatic Shell Rule", "body": "The chrome carries no hue. If a colour is not telling the reader what a note is or where it stands, it does not ship.", "section": "colors" },
+      { "name": "The Word Beside The Swatch Rule", "body": "A colour never appears alone. Every kind swatch is followed by the kind's full name; every stage colour is followed by the stage's name and an authored mark.", "section": "colors" },
+      { "name": "The One Scale Rule", "body": "The type scale is fixed in rem — never fluid, never clamp().", "section": "typography" },
+      { "name": "The Mono-Is-Literal Rule", "body": "Monospace means this is a literal token or a measurement. If a word is prose, it is set in Archivo.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "A surface is flat at rest. Shadow appears only when something genuinely floats above the page.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do write every kind and status out in full, next to its colour.",
+      "Do put the legend on the same screen as the marks it explains.",
+      "Do keep the three grammar tokens visible under the capture field and light them up as the draft uses them.",
+      "Do use hairline rules and aligned columns to separate records.",
+      "Do set timestamps, counts and syntax tokens in JetBrains Mono with tabular figures."
+    ],
+    "donts": [
+      "Don't abbreviate a kind into a two-letter code; a code needs a decoder, and the reader is new to the vocabulary.",
+      "Don't put colour in the chrome, on a panel, or on a background.",
+      "Don't lift a record into a card: no shadow, no radius-heavy surface, no card grid.",
+      "Don't add a permanent banner to explain the syntax; teach it where it is used.",
+      "Don't introduce a second type voice, a second font file, or a network request to render the interface."
+    ]
+  }
+}
