@@ -1,0 +1,153 @@
+/*
+ * Design tokens.
+ *
+ * One scale, two themes, no magic numbers in components. Light is the
+ * default ground; dark follows the same hues at desk-lamp depth so a
+ * laptop at night does not become a different product.
+ *
+ * Colour does three jobs and nothing else:
+ *   1. kind  — what a note IS (six hues, always paired with the word)
+ *   2. stage — where a note IS in its life (pending / active / done / dropped)
+ *   3. chrome — ink, rules, surfaces. The chrome is deliberately achromatic
+ *      so the only colour on screen is information.
+ *
+ * Every ink value below clears 4.5:1 against the surface it is used on,
+ * in both themes. That is the floor, not a preference.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- type ---- */
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.45;
+  --leading-loose: 1.6;
+
+  --tracking-tight: -0.012em;
+  --tracking-caps: 0.055em;
+
+  /* ---- space ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+
+  /* ---- shape ---- */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* ---- motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 260ms;
+
+  /* ---- light ground ---- */
+  --surface-page: #eaecf1;
+  --surface-panel: #ffffff;
+  --surface-sunken: #f5f6f9;
+  --surface-inset: #f8f9fb;
+  --surface-hover: #f1f3f8;
+  --surface-selected: #e9ecfa;
+
+  --rule: #e3e6ec;
+  --rule-strong: #c9cedb;
+  --rule-faint: #edeff3;
+
+  --ink: #0f1218;
+  --ink-2: #3b4350;
+  --ink-3: #566070;
+  --ink-4: #5c6474;
+
+  --accent: #101319;
+  --accent-hover: #2a303c;
+  --accent-soft: #e4e7ee;
+  --accent-ink: #ffffff;
+
+  --danger: #b42318;
+  --danger-soft: #fdeceb;
+
+  /* ---- kinds: what a note is ---- */
+  --kind-note: #5a6474;
+  --kind-idea: #6b28d9;
+  --kind-feature: #0b6b63;
+  --kind-fix: #b42318;
+  --kind-decision: #8a4b0b;
+  --kind-question: #0b6a9b;
+
+  /* ---- stages: where a note is ---- */
+  --stage-pending-ink: #55606f;
+  --stage-pending-bg: #ffffff;
+  --stage-active-ink: #ffffff;
+  --stage-active-bg: #101319;
+  --stage-done-ink: #10693a;
+  --stage-done-bg: #e3f4ea;
+  --stage-dropped-ink: #616978;
+  --stage-dropped-bg: #f1f2f6;
+
+  --shadow-menu: 0 1px 2px rgb(16 19 25 / 8%), 0 12px 28px rgb(16 19 25 / 12%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-page: #0f1116;
+    --surface-panel: #161920;
+    --surface-sunken: #1d212a;
+    --surface-inset: #1b1f27;
+    --surface-hover: #1f242d;
+    --surface-selected: #1e2333;
+
+    --rule: #262b35;
+    --rule-strong: #39404d;
+    --rule-faint: #1f242d;
+
+    --ink: #e8eaef;
+    --ink-2: #b8bec9;
+    --ink-3: #9aa1ae;
+    --ink-4: #8f96a4;
+
+    --accent: #e8eaef;
+    --accent-hover: #ffffff;
+    --accent-soft: #2a2f39;
+    --accent-ink: #0f1116;
+
+    --danger: #ff9d95;
+    --danger-soft: #2e1a19;
+
+    --kind-note: #aab2c0;
+    --kind-idea: #b79bff;
+    --kind-feature: #5fd6c9;
+    --kind-fix: #ff9d95;
+    --kind-decision: #e3b778;
+    --kind-question: #6fc4f5;
+
+    --stage-pending-ink: #9aa1ae;
+    --stage-pending-bg: #161920;
+    --stage-active-ink: #0f1116;
+    --stage-active-bg: #e8eaef;
+    --stage-done-ink: #5fd08a;
+    --stage-done-bg: #12291e;
+    --stage-dropped-ink: #9aa1ae;
+    --stage-dropped-bg: #1f242d;
+
+    --shadow-menu: 0 1px 2px rgb(0 0 0 / 45%), 0 14px 32px rgb(0 0 0 / 40%);
+  }
+}

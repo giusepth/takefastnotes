@@ -1,0 +1,224 @@
+/* =============================================================
+   TakeFastNotes — Acerca de
+   A document, not a dashboard: one measure, generous leading, and
+   the facts about the data stated plainly.
+   ============================================================= */
+
+.about {
+  max-width: 74ch;
+  margin: 0 auto;
+}
+
+.about-header {
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--space-6);
+}
+
+.about-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-2xl);
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.about-lede {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--ink-3);
+}
+
+.about-section {
+  margin-bottom: var(--space-8);
+}
+
+.about-section-title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 640;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.about-section p {
+  margin: 0 0 var(--space-3);
+  color: var(--ink-2);
+  line-height: var(--leading-loose);
+}
+
+.about-section p:last-child {
+  margin-bottom: 0;
+}
+
+.about-section strong {
+  color: var(--ink);
+  font-weight: 620;
+}
+
+/* ---------- lists and steps ---------- */
+
+.about-steps {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.35rem;
+  color: var(--ink-2);
+  line-height: var(--leading-loose);
+}
+
+.about-steps li {
+  margin-bottom: var(--space-2);
+}
+
+.about-steps li::marker {
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.about-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ink-2);
+  line-height: var(--leading-loose);
+}
+
+.about-list li {
+  margin-bottom: var(--space-2);
+}
+
+.about-list li::marker {
+  color: var(--ink-4);
+}
+
+.about-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.about-table td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-top: 1px solid var(--rule-faint);
+  color: var(--ink-2);
+  vertical-align: top;
+  line-height: var(--leading-normal);
+}
+
+.about-table td:first-child {
+  width: 12ch;
+  white-space: nowrap;
+}
+
+.about-note {
+  font-size: var(--text-sm);
+  color: var(--ink-3);
+  line-height: var(--leading-normal);
+}
+
+/* ---------- facts ---------- */
+
+.about-facts {
+  margin: 0 0 var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+.about-fact {
+  display: grid;
+  grid-template-columns: 16ch minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--rule-faint);
+  align-items: baseline;
+}
+
+.about-fact dt {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+.about-fact dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- actions ---------- */
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.about-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.about-status--ok {
+  color: var(--stage-done-ink);
+}
+
+.about-status--error {
+  color: var(--kind-fix);
+}
+
+.about-status--busy {
+  color: var(--ink-3);
+}
+
+/* ---------- inline code ---------- */
+
+.about-section code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.about kbd {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  border: 1px solid var(--rule-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+  padding: 1px 5px;
+  background: var(--surface-panel);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .about-fact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .about-table td:first-child {
+    width: auto;
+    white-space: normal;
+  }
+
+  .about-table td {
+    display: block;
+    border-top: 0;
+    padding-bottom: 0;
+  }
+
+  .about-table tr {
+    display: block;
+    border-top: 1px solid var(--rule-faint);
+    padding: var(--space-2) 0;
+  }
+
+  .about-table tr td:last-child {
+    padding-bottom: var(--space-2);
+  }
+}

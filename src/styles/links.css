@@ -1,0 +1,272 @@
+/* =============================================================
+   Enlaces entre notas
+   -------------------------------------------------------------
+   Una relación dice cómo se conectan dos notas, pero no dice qué
+   es una nota ni en qué punto está: por eso el vínculo se dibuja
+   en tinta y sin color, y solo lo usan los tipos y los estados.
+
+   La sección es una tabla sin adornos: una columna fija para la
+   relación —el mismo lugar que ocupa el tipo en el registro— y
+   las palabras al lado, con una regla fina entre cada bloque.
+   ============================================================= */
+
+.links {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---------- encabezado ---------- */
+
+.links-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.links-heading {
+  font-size: var(--text-2xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.links-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-4);
+}
+
+/* ---------- controles ---------- */
+
+.links-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.links-search {
+  font: inherit;
+  font-size: var(--text-xs);
+  flex: 1 1 150px;
+  min-width: 0;
+  padding: 5px var(--space-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  color: var(--ink);
+}
+
+.links-relation {
+  font: inherit;
+  font-size: var(--text-xs);
+  padding: var(--space-1) 6px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  color: var(--ink);
+  max-width: 20ch;
+}
+
+.links-search:focus,
+.links-relation:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.links-add {
+  font-size: var(--text-xs);
+  height: auto;
+  padding: 5px var(--space-3);
+}
+
+/* ---------- candidatos ---------- */
+
+.links-candidates {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-1);
+  background: var(--surface-panel);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  max-height: 168px;
+  overflow-y: auto;
+}
+
+.links-candidate {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-1) 6px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.links-candidate:hover,
+.links-candidate:focus-visible {
+  background: var(--surface-hover);
+}
+
+.links-candidate.is-selected {
+  background: var(--surface-selected);
+}
+
+.links-candidate .kind-swatch {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+}
+
+.links-candidate-title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.links-candidate-kind {
+  margin-left: auto;
+  font-size: var(--text-2xs);
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+
+/* ---------- listas de vínculos ---------- */
+
+.links-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--rule-faint);
+}
+
+.links-block-label {
+  font-size: var(--text-2xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.links-hint,
+.links-empty {
+  margin: 0;
+  font-size: var(--text-2xs);
+  line-height: var(--leading-normal);
+  color: var(--ink-4);
+}
+
+.links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links-item {
+  display: grid;
+  grid-template-columns: max-content 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 3px 0;
+}
+
+.links-item--incoming {
+  grid-template-columns: max-content 16px minmax(0, 1fr);
+}
+
+.links-relation-chip {
+  justify-self: start;
+  max-width: 100%;
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink-2);
+  background: var(--surface-panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
+  padding: 1px 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.links-arrow {
+  color: var(--ink-4);
+  transform: rotate(-90deg);
+}
+
+.links-arrow--incoming {
+  transform: rotate(90deg);
+}
+
+.links-item-title {
+  font-size: var(--text-xs);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- error ---------- */
+
+.links-error {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--danger);
+}
+
+/* =============================================================
+   El pie del editor sostiene ahora dos cosas —el contenedor y
+   los enlaces—. La rejilla los pone en la misma fila y deja las
+   acciones en la fila siguiente, siempre a la derecha: el editor
+   se lee como una hoja, no como un botón suelto.
+
+   El selector de regla es más específico a propósito, porque esta
+   hoja se carga antes que la del registro.
+   ============================================================= */
+
+.note-editor .note-editor-foot {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'container links'
+    'actions actions';
+  align-items: start;
+  gap: var(--space-3);
+}
+
+.note-editor .note-editor-container {
+  grid-area: container;
+}
+
+.note-editor .links {
+  grid-area: links;
+}
+
+.note-editor .note-editor-actions {
+  grid-area: actions;
+  justify-self: end;
+  margin-left: 0;
+}
+
+@media (max-width: 560px) {
+  .note-editor .note-editor-foot {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'container'
+      'links'
+      'actions';
+  }
+}

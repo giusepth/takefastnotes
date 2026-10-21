@@ -1,0 +1,23 @@
+/*
+ * Self-hosted typefaces.
+ *
+ * Both faces are bundled from node_modules into this folder so the build
+ * ships exactly two woff2 files and the app never touches the network.
+ * Latin subset only: it covers Latin-1 (Spanish accents included).
+ */
+
+@font-face {
+  font-family: 'Archivo Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('./fonts/archivo-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('./fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+}
