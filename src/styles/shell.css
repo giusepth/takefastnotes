@@ -506,6 +506,12 @@
     font-size: var(--text-lg);
   }
 
+  /* On a phone the promise of the product is one line or none: the name
+     and the capture field are what the screen is for. */
+  .brand-statement {
+    display: none;
+  }
+
   .header-meta {
     gap: var(--space-2);
   }

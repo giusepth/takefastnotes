@@ -13,6 +13,21 @@
   border-top: 1px solid var(--rule);
 }
 
+/* Three columns only when there is room for them. With the sidebar open the
+   register narrows, and a squeezed legend teaches less, not more. */
+@media (max-width: 1400px) {
+  .vocabulary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .vocabulary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}
+
 .vocabulary-column {
   min-width: 0;
 }
