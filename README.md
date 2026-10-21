@@ -8,6 +8,8 @@ El producto, la arquitectura y la política de datos están especificados en [`s
 La verdad del producto está en [`PRODUCT.md`](PRODUCT.md) y el sistema de diseño en
 [`DESIGN.md`](DESIGN.md).
 
+**Está en producción:** https://takefastnotes.vercel.app
+
 ## Cómo correrlo
 
 ```bash
