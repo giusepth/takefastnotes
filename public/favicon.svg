@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="TakeFastNotes">
+  <!--
+    The note row, reduced to a mark: a kind swatch on the left and the
+    record lines on the right. Same stroke weight as the interface icons
+    (1.5 on a 16 grid, doubled here for a 32 grid).
+  -->
+  <rect width="32" height="32" rx="6" fill="#0f1218" />
+  <rect x="6" y="9" width="4" height="4" rx="1" fill="#0b6b63" />
+  <path d="M14 11h12M14 16h12M14 21h7" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" />
+</svg>
