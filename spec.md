@@ -271,7 +271,7 @@ All writes go through a repository method that owns its transaction. Components 
 
 ## Deployment
 
-Target: **Vercel Hobby (free)**. The app is a static bundle served from Vercel's CDN. No server, no functions, no database, no environment variables, no secrets.
+Target: **Vercel Hobby (free)**, published at `https://takefastnotes.vercel.app`. The app is a static bundle served from Vercel's CDN. No server, no functions, no database, no environment variables, no secrets.
 
 ### Decisions
 
