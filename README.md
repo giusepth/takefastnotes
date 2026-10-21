@@ -29,10 +29,16 @@ después de cargar la app.
 
 ## Desplegar en Vercel (plan gratuito)
 
-1. `git push` a GitHub.
-2. En Vercel: **Import Project** → apuntá al repo → Framework Preset **Vite** → Deploy.
-3. `vercel.json` ya define el build (`npm run build`), el output (`dist`) y las cabeceras de
-   seguridad.
+El proyecto ya existe en Vercel (plan gratuito, equipo `giusepthdev`) y está conectado al repo:
+**cada `git push` a `main` despliega solo**. Para desplegar a mano:
+
+```bash
+npx vercel link --project takefastnotes
+npx vercel deploy --prod
+```
+
+`vercel.json` ya define el build (`npm run build`), el output (`dist`) y las cabeceras de
+seguridad.
 
 > **El dominio es la clave de la base de datos.** IndexedDB pertenece al origen: `notes.vercel.app`
 > y `notes.tuempresa.com` son dos bases distintas, y las notas no se mudan solas. Elegí el nombre

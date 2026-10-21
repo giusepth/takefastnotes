@@ -27,3 +27,4 @@ coverage
 **/.impeccable/live/annotations/
 **/.impeccable/live/cache/
 # impeccable-ignore-end
+.env*
