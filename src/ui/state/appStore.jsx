@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react'
 import { quickCapture } from '../../domain/usecases/quickCapture.js'
 import {
   addTag,
@@ -50,7 +50,10 @@ function reducer(state, action) {
         notes: state.notes.map((note) => (note.id === action.note.id ? action.note : note)),
       }
     case 'prefsChanged':
-      return { ...state, prefs: action.prefs }
+      // The action carries only the key that changed: a dispatch that
+      // arrives late must not be able to bring back a whole stale
+      // preference object and overwrite what was decided after it.
+      return { ...state, prefs: { ...state.prefs, ...action.prefs } }
     case 'containerAdded':
       return { ...state, containers: [...state.containers, action.container] }
     case 'containersReplaced':
@@ -74,6 +77,39 @@ function reducer(state, action) {
 }
 
 /**
+ * Decides which container a note points at after an edit.
+ *
+ * The container the note asks for wins when it exists. The list the store
+ * holds is a snapshot from boot, so a container that the list does not know
+ * is looked up in the database: it may have been created in another tab of
+ * the same origin, and it is alive there. Only when neither the requested
+ * container nor the one the note already has can be found does the note
+ * become unclassified.
+ *
+ * @param {{requested: string | null, current: string | null, containers: object[], repositories: object}} input
+ * @returns {Promise<{id: string | null, container: object | null}>}
+ */
+async function resolveContainer({ requested, current, containers, repositories }) {
+  const known = async (id) => {
+    if (!id) return null
+    const inMemory = containers.find((container) => container.id === id)
+    if (inMemory) return inMemory
+    return (await repositories.containers.byId(id)) ?? null
+  }
+
+  // An explicit "sin contenedor" is a decision, not a loss.
+  if (requested === null) return { id: null, container: null }
+
+  const requestedContainer = await known(requested)
+  if (requestedContainer) return { id: requested, container: requestedContainer }
+
+  const currentContainer = await known(current)
+  if (currentContainer) return { id: current, container: currentContainer }
+
+  return { id: null, container: null }
+}
+
+/**
  * Single source of truth for the UI.
  *
  * Reads are synchronous from the store; writes go through a use case, then
@@ -81,6 +117,13 @@ function reducer(state, action) {
  */
 export function AppStoreProvider({ repositories, children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  // The latest state, readable from an action that started before the
+  // state changed. A deletion takes a while, and when it finishes it has
+  // to decide with the value that is current now, not with the one it
+  // found when it started.
+  const stateRef = useRef(state)
+  stateRef.current = state
 
   useEffect(() => {
     let cancelled = false
@@ -107,9 +150,18 @@ export function AppStoreProvider({ repositories, children }) {
 
   const capture = useCallback(
     async (text) => {
+      // The selection is only inherited while it points at a container that
+      // exists: a capture never stores a `containerId` that references
+      // nothing.
+      const selectedId = state.prefs.currentContainerId ?? null
+      const currentContainerId =
+        selectedId && state.containers.some((container) => container.id === selectedId)
+          ? selectedId
+          : null
+
       const note = quickCapture(text, {
         containers: state.containers,
-        currentContainerId: state.prefs.currentContainerId ?? null,
+        currentContainerId,
       })
 
       await repositories.notes.create(note)
@@ -139,7 +191,24 @@ export function AppStoreProvider({ repositories, children }) {
         next = editNote(next, { title: patch.title, body: patch.body })
       }
       if (patch.containerId !== undefined) {
-        next = moveNote(next, patch.containerId, { containers: state.containers })
+        // The domain refuses a container that does not exist, and it is right
+        // to: the rule is about the data, not about the moment. The store is
+        // the layer that knows about deleted containers — and about the ones
+        // it has not seen yet, because the list it holds is a snapshot from
+        // boot. A container created in another tab is alive in the database
+        // even when the store does not know it, so a note never loses its
+        // classification because of a list that is out of date.
+        const { id, container } = await resolveContainer({
+          requested: patch.containerId ?? null,
+          current: next.containerId ?? null,
+          containers: state.containers,
+          repositories,
+        })
+        const known =
+          container && !state.containers.some((item) => item.id === container.id)
+            ? [...state.containers, container]
+            : state.containers
+        next = moveNote(next, id, { containers: known })
       }
       for (const tag of patch.addTags ?? []) next = addTag(next, tag)
       for (const tag of patch.removeTags ?? []) next = removeTag(next, tag)
@@ -193,6 +262,37 @@ export function AppStoreProvider({ repositories, children }) {
 
       dispatch({ type: 'containersReplaced', containers: result.containers })
       dispatch({ type: 'notesReplaced', notes: result.notes })
+
+      // The selection cannot keep pointing at a container that no longer
+      // exists: the filter would hide every note and the captures would
+      // inherit a dangling id. The removed set is the difference between the
+      // previous list and the new one — the descendants survive (they move
+      // up), so only what was really deleted clears the selection.
+      const removedIds = new Set(
+        state.containers
+          .filter((container) => !result.containers.some((next) => next.id === container.id))
+          .map((container) => container.id),
+      )
+
+      // The decision is made with the value that is current now, not with
+      // the one this action started with: the destructive writes take a
+      // while, and the reader may have selected another container in the
+      // meantime. A deletion never clears a selection that is newer than
+      // itself.
+      const freshSelectedId = (await repositories.prefs.get('currentContainerId')) ?? null
+      const currentSelectedId = stateRef.current.prefs.currentContainerId ?? null
+      const selectionWasReplaced =
+        Boolean(currentSelectedId) && !removedIds.has(currentSelectedId)
+
+      if (
+        freshSelectedId &&
+        removedIds.has(freshSelectedId) &&
+        !selectionWasReplaced
+      ) {
+        await repositories.prefs.set('currentContainerId', null)
+        dispatch({ type: 'prefsChanged', prefs: { currentContainerId: null } })
+      }
+
       return result
     },
     [repositories, state.containers, state.notes],
@@ -207,10 +307,13 @@ export function AppStoreProvider({ repositories, children }) {
   const selectContainer = useCallback(
     async (containerId) => {
       const next = containerId ?? null
-      dispatch({ type: 'prefsChanged', prefs: { ...state.prefs, currentContainerId: next } })
+      // Only the key that changed travels: a dispatch that carries the whole
+      // preference object would bring back a stale value for everything
+      // else that moved on while this action was running.
+      dispatch({ type: 'prefsChanged', prefs: { currentContainerId: next } })
       await repositories.prefs.set('currentContainerId', next)
     },
-    [repositories, state.prefs],
+    [repositories],
   )
 
   /**
@@ -222,7 +325,9 @@ export function AppStoreProvider({ repositories, children }) {
       if (!current) throw new Error(`Container not found: ${containerId}`)
 
       const next = { ...current, ...patch, id: current.id, updatedAt: new Date().toISOString() }
-      await repositories.containers.update(containerId, patch)
+      // The timestamp goes to the database with the patch: otherwise the row
+      // keeps the old one and the state contradicts what is stored.
+      await repositories.containers.update(containerId, { ...patch, updatedAt: next.updatedAt })
       dispatch({ type: 'containerReplaced', container: next })
       return next
     },
@@ -238,7 +343,10 @@ export function AppStoreProvider({ repositories, children }) {
       if (!current) throw new Error(`Container not found: ${containerId}`)
 
       const next = setContainerParent(current, parentId, { containers: state.containers })
-      await repositories.containers.update(containerId, { parentId: next.parentId })
+      await repositories.containers.update(containerId, {
+        parentId: next.parentId,
+        updatedAt: next.updatedAt,
+      })
       dispatch({ type: 'containerReplaced', container: next })
       return next
     },
@@ -287,7 +395,7 @@ export function AppStoreProvider({ repositories, children }) {
 
     downloadJson(`takefastnotes-${payload.exportedAt.slice(0, 10)}.json`, payload)
 
-    const prefs = { ...state.prefs, lastExportAt: payload.exportedAt }
+    const prefs = { lastExportAt: payload.exportedAt }
     await repositories.prefs.set('lastExportAt', payload.exportedAt)
     dispatch({ type: 'prefsChanged', prefs })
 

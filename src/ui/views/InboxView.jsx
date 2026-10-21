@@ -35,6 +35,10 @@ export function InboxView({
   const [vocabularyOpen, setVocabularyOpen] = useState(false)
   const [selectedKinds, setSelectedKinds] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
+  // A row that fails can go away with the failure: an archived note leaves
+  // the register. The message lives here, above the list, so it survives
+  // whatever the row does.
+  const [error, setError] = useState(null)
 
   const containerNames = useMemo(() => {
     const map = new Map()
@@ -187,6 +191,12 @@ export function InboxView({
         </div>
       ) : null}
 
+      {error ? (
+        <p className="view-alert" role="alert">
+          {error}
+        </p>
+      ) : null}
+
       {empty ? (
         <EmptyState
           title={emptyTitle(scope, hasFilters)}
@@ -209,6 +219,7 @@ export function InboxView({
                 onUpdateNote={onUpdateNote}
                 onCreateLink={onCreateLink}
                 onRemoveLink={onRemoveLink}
+                onError={setError}
               />
             ))}
           </ol>

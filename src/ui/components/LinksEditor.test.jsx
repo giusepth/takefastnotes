@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { LinksEditor } from './LinksEditor.jsx'
 import { NoteEditor } from './NoteEditor.jsx'
@@ -234,7 +234,7 @@ describe('el editor de nota', () => {
     return { ...utils, props }
   }
 
-  it('sigue guardando con Ctrl+Enter y cancelling con Escape', () => {
+  it('sigue guardando con Ctrl+Enter y cancelling con Escape', async () => {
     const { props } = renderNoteEditor()
 
     fireEvent.keyDown(screen.getByLabelText('Texto de la nota'), { key: 'Enter', ctrlKey: true })
@@ -244,8 +244,34 @@ describe('el editor de nota', () => {
       containerId: null,
     })
 
+    // Escape cancels once the write is done. While the write is on its way
+    // the editor stays open: cancelling there would store a change the
+    // reader tried to abandon.
+    await waitFor(() => expect(screen.getByRole('button', { name: /Guardar/ }).disabled).toBe(false))
+
     fireEvent.keyDown(screen.getByLabelText('Texto de la nota'), { key: 'Escape' })
     expect(props.onCancel).toHaveBeenCalled()
+  })
+
+  it('no cancela con Escape mientras la escritura está en marcha', async () => {
+    let release
+    const gate = new Promise((resolve) => {
+      release = resolve
+    })
+    const onSave = vi.fn(() => gate)
+    const onCancel = vi.fn()
+
+    renderNoteEditor({ onSave, onCancel })
+
+    fireEvent.keyDown(screen.getByLabelText('Texto de la nota'), { key: 'Enter', ctrlKey: true })
+    fireEvent.keyDown(screen.getByLabelText('Texto de la nota'), { key: 'Escape' })
+
+    expect(onCancel).not.toHaveBeenCalled()
+    expect(screen.getByText(/guardado en curso/)).toBeTruthy()
+    expect(screen.getByLabelText('Texto de la nota')).toBeTruthy()
+
+    release()
+    await waitFor(() => expect(screen.getByRole('button', { name: /Guardar/ }).disabled).toBe(false))
   })
 
   it('mantiene el selector de contenedores con su contrato', () => {

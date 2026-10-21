@@ -415,6 +415,57 @@ The trust document. It answers the three questions a person asks before handing 
 
 The backup actions are real, not decorative: export writes the whole database to a JSON file and records the timestamp in preferences; import validates the file field by field and merges it without deleting anything.
 
+## Revisión ciega (Judgment Day)
+
+Dos revisores adversarios ciegos, mismo target inmutable (`861b6d2a…`, commit `8a6a3ef`, 73 archivos, 10.179 líneas), un barrido de lectura por cada uno. Criterios: correctitud, casos borde, manejo de errores, performance, seguridad y convenciones del proyecto. Los dos Conservativemente no auto-corregimos nada: solo los hallazgos severos confirmados por ambos van a una ronda de corrección.
+
+### Confirmados por ambos (2 severos + 6 advertencias)
+
+| ID | Severidad | Hallazgo | Dónde |
+|---|---|---|---|
+| C1 | CRITICAL | Al borrar el contenedor seleccionado, `prefs.currentContainerId` queda apuntando a un contenedor que ya no existe: el registro muestra "Sin resultados" y las capturas siguientes se guardan con un `containerId` colgante. | `src/ui/state/appStore.jsx` |
+| C2 | CRITICAL | Editar una nota cuyo `containerId` ya no existe descarta **toda** la edición: `moveNote` lanza antes del dispatch, el editor ya se cerró y el texto tipeado se pierde sin mensaje. | `src/ui/state/appStore.jsx`, `NoteRow.jsx`, `NoteView.jsx` |
+| W1 | WARNING | `updateContainer` y `nestContainer` calculan un `updatedAt` nuevo en memoria pero escriben solo el patch: en la base queda el viejo. | `src/ui/state/appStore.jsx` |
+| W2 | WARNING | Si la escritura de una nota falla, el store revierte en silencio y nadie ve el error (la captura sí lo reporta). | `src/ui/state/appStore.jsx`, `NoteRow.jsx` |
+| W3 | WARNING | "Acerca de" afirma que los contenedores se muestran en una lista plana y que el árbol anidado es lo siguiente: es falso, el árbol ya existe. | `src/ui/views/AboutView.jsx` |
+| W4 | WARNING | `pinned` es un campo muerto: nadie lo fija y el orden nunca lo tiene en cuenta. | `src/domain/usecases/search.js` |
+| W5 | WARNING | No existe la vista "Sin contenedor", que el spec define como vista derivada. | `src/ui/views/InboxView.jsx` |
+| W6 | WARNING | Faltan interacciones de captura del spec: `Esc` no limpia el campo, `Ctrl/Cmd+Enter` guarda en vez de expandir, y no existe el panel expandido. | `src/ui/components/QuickCapture.jsx` |
+
+### Sospechosos (reportado por un solo juez — no se corrigen sin decisión)
+
+| ID | Severidad | Hallazgo |
+|---|---|---|
+| S1 | WARNING | `removeContainer` desclasifica las notas de los descendientes **que sobreviven** al borrado (los hijos se reparentan, pero sus notas quedan sin contenedor). |
+| S2 | WARNING | La importación no valida la integridad referencial: acepta `containerId` inexistente, pares de enlaces duplicados y restaura las preferencias tal cual. |
+| S3 | WARNING | El editor de enlaces solo crea vínculos nota→nota; el spec pide también nota→contenedor. |
+| S4 | WARNING | Una captura compuesta solo de gramática (`#solo`, `@Docs`) se rechaza, cuando el spec dice que nunca debe bloquear más allá de "no vacío". |
+| S5 | WARNING | Los nombres de contenedor no son únicos entre hermanos, así que `@nombre` se liga a uno arbitrario. |
+| S6 | WARNING | La importación no valida el esquema de la URL del contenedor: un `javascript:` plantado en una copia termina siendo un `href`. |
+| S7 | WARNING | `downloadJson` revoca el object URL en el mismo tick del clic: documentado como la forma de romper la descarga en Firefox. |
+| S8 | SUGGESTION | El store no tiene archivo de tests propio, que es justamente donde viven los hallazgos de esta revisión. |
+| S9 | SUGGESTION | Una etiqueta al final de una frase deja el punto suelto en el cuerpo ("hola #tag." → "hola ."). |
+
+### Verificado en producción durante la revisión
+
+0 excepciones · consola vacía · 6 requests same-origin · 103 tests verdes · CSP estricto intacto. Los dos críticos son de **integridad de datos**, no de seguridad: una edición se pierde y una nota queda con un contenedor inexistente.
+
+### Resultado de la corrección
+
+| Ronda | Alcance | Resultado |
+|---|---|---|
+| 1 | C1, C2, W1, W2, W3 | Los cinco corregidos y verificados (110 tests). El re-juicio encontró **3 defectos introducidos por la propia corrección**. |
+| 2 | F1, F2, F3, F4 | Los cuatro corregidos (117 tests). El re-juicio final: **ningún hallazgo severo**, los nueve ítems del ledger se sostienen. |
+
+**Veredicto: APPROVED.** El re-juicio final no encontró ningún CRÍTICO, ni introducidos por las correcciones ni preexistentes fuera del ledger.
+
+**Defectos que el re-juicio final dejó como info (no corregidos, por decisión de alcance):**
+
+- *Preexistente:* dos borrados de contenedor simultáneos pueden resucitar en la base un contenedor borrado (cada borrado reescribe su propia foto de contenedores).
+- *Preexistente:* un contenedor creado en otra pestaña no entra al store, así que la fila no muestra su chip hasta recargar.
+- *Introducido y cerrado en la integración:* el aviso del editor prometía un cancelar imposible, y un cambio de estado que fallaba quedaba en silencio cuando la nota salía de la bandeja.
+- *Restantes del ledger:* S1–S9, W4, W5 y W6 siguen abiertos, tal como estaban.
+
 ## Design system
 
 The interface follows the **Impeccable** design skill, documented in `DESIGN.md`.

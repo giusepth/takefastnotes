@@ -78,9 +78,11 @@ export function NoteView({
           notes={notes}
           onCreateLink={onCreateLink}
           onRemoveLink={onRemoveLink}
-          onSave={(changes) => {
+          onSave={async (changes) => {
+            // The editor closes only when the note is stored: a failed
+            // write keeps it open, with the text and the message.
+            await onUpdateNote(note.id, changes)
             setEditing(false)
-            onUpdateNote(note.id, changes)
           }}
           onCancel={() => setEditing(false)}
         />

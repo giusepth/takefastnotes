@@ -171,8 +171,11 @@ export function AboutView({ notes, containers, links, prefs, onExport, onImport 
             </li>
           </ul>
           <p className="about-note">
-            Los contenedores son jerárquicos: uno puede contener a otro. Por ahora la app los
-            muestra en una lista plana; el árbol anidado es lo siguiente.
+            Los contenedores son jerárquicos: uno puede contener a otro, y el árbol se ve en dos
+            sitios —en la barra lateral y en la sección Contenedores—, con el número de notas de
+            cada rama. Lo que todavía no existe: mover un contenedor arrastrándolo (el anidamiento
+            se hace desde el menú de cada contenedor) y archivar un contenedor como se archivan las
+            notas.
           </p>
         </article>
 

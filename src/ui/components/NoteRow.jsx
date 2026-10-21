@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { IconArchive, IconClose, IconEdit, IconFolder, IconMore, IconUnarchive } from '../icons/index.jsx'
+import { userMessage } from '../lib/errors.js'
 import { formatFullTime, formatNoteTime } from '../lib/format.js'
 import {
   KIND_LABELS,
@@ -39,6 +40,7 @@ export function NoteRow({
   onUpdateNote,
   onCreateLink,
   onRemoveLink,
+  onError = null,
 }) {
   const [editing, setEditing] = useState(false)
 
@@ -87,13 +89,37 @@ export function NoteRow({
         },
   ]
 
+  /**
+   * A change that is not the content of the note: kind, state, archive.
+   *
+   * The store rolls the row back when the write fails, so the failure has
+   * to be said out loud: nobody sees a change that silently did not happen.
+   *
+   * The message also goes to the parent. An archived note leaves the
+   * register and the row goes with it, so a message that only lives in this
+   * row dies with the row and the failure goes back to being silent.
+   */
+  async function update(patch) {
+    // The banner above the register is the single voice for a failed write:
+    // a row-level failure can take the row out of the register (archiving it,
+    // or moving it out of the inbox scope), and a message that lives only in
+    // this row dies with the row. Reporting from one place avoids saying the
+    // same thing twice.
+    if (onError) onError(null)
+    try {
+      await onUpdateNote(note.id, patch)
+    } catch (updateError) {
+      if (onError) onError(userMessage(updateError))
+    }
+  }
+
   function handleAction(id) {
     if (id === 'edit') {
       setEditing(true)
       return
     }
-    if (id === 'archive') onUpdateNote(note.id, { archived: true })
-    if (id === 'restore') onUpdateNote(note.id, { archived: false })
+    if (id === 'archive') update({ archived: true })
+    if (id === 'restore') update({ archived: false })
   }
 
   return (
@@ -107,7 +133,7 @@ export function NoteRow({
           headLabel="Tipo — qué es esta nota"
           items={kindItems}
           selectedId={kind}
-          onSelect={(next) => onUpdateNote(note.id, { kind: next })}
+          onSelect={(next) => update({ kind: next })}
           trigger={
             <>
               <span className={`kind-swatch kind-swatch--${kind}`} aria-hidden="true" />
@@ -126,9 +152,13 @@ export function NoteRow({
             notes={notes}
             onCreateLink={onCreateLink}
             onRemoveLink={onRemoveLink}
-            onSave={(changes) => {
+            onSave={async (changes) => {
+              // The editor closes only when the note is stored: a failed
+              // write keeps it open, with the text and the message. The
+              // editor says what went wrong by itself, so the row does not
+              // report it a second time.
+              await onUpdateNote(note.id, changes)
               setEditing(false)
-              onUpdateNote(note.id, changes)
             }}
             onCancel={() => setEditing(false)}
           />
@@ -150,7 +180,7 @@ export function NoteRow({
                       className="tag-chip"
                       aria-label={`Quitar la etiqueta ${tag}`}
                       title={`Quitar la etiqueta #${tag}`}
-                      onClick={() => onUpdateNote(note.id, { removeTags: [tag] })}
+                      onClick={() => update({ removeTags: [tag] })}
                     >
                       #{tag}
                       <IconClose className="tag-remove" />
@@ -169,6 +199,7 @@ export function NoteRow({
             ) : null}
           </>
         )}
+
       </div>
 
       <div className="note-side">
@@ -180,7 +211,7 @@ export function NoteRow({
             headLabel="Estado — en qué punto está esta nota"
             items={statusItems}
             selectedId={status}
-            onSelect={(next) => onUpdateNote(note.id, { status: next })}
+            onSelect={(next) => update({ status: next })}
             trigger={
               <>
                 {StageMark ? <StageMark /> : null}

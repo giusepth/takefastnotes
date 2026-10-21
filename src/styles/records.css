@@ -398,6 +398,33 @@
   outline-offset: 1px;
 }
 
+/* ---------- the message that names a failed write ---------- */
+
+.note-editor-error {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--danger);
+}
+
+.note-editor-hint {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+}
+
+/* The failure of a row that is no longer on the screen: it stays above the
+   list, where the row cannot take it away. */
+
+.view-alert {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: var(--text-xs);
+}
+
 .note-editor-foot {
   display: flex;
   flex-wrap: wrap;
